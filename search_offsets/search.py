@@ -14,6 +14,9 @@ from search_offsets.patterns import (
 
 
 def search(path: str, patterns: list[Pattern]) -> Mapping[str, list[int]]:
+    """
+    Search patterns in the given file.
+    """
     patterns_dict: Mapping[int, list[Pattern]] = group_patterns(patterns)
 
     found = defaultdict(list)
@@ -29,6 +32,9 @@ def search(path: str, patterns: list[Pattern]) -> Mapping[str, list[int]]:
 
 
 def print_found(section_table: SectionTable, pattern_names: Iterable[str], found: Mapping[str, int]) -> None:
+    """
+    Print offsets of the found patterns.
+    """
     for pattern in pattern_names:
         if not found[pattern]:
             print(f"{pattern}: NOT FOUND")
@@ -49,6 +55,9 @@ app = typer.Typer()
 
 @app.command()
 def main(path: Path) -> None:
+    """
+    Process the given portable executable file, print its checksum(time stamp) and offsets of the found patterns.
+    """
     patterns: list[Pattern] = load_patterns()
 
     with path.open("rb") as exe:

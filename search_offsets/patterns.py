@@ -7,6 +7,10 @@ from more_itertools import chunked
 
 
 class Pattern(NamedTuple):
+    """
+    A named tuple to contain information about a pattern: it's name and the pattern in bytes.
+    """
+
     name: str
     pattern: bytes
 
@@ -18,14 +22,23 @@ class Pattern(NamedTuple):
 
 
 def hex_to_bytes(s: str) -> bytes:
+    """
+    Convert hexadecimal string to bytes.
+    """
     return int(s, 16).to_bytes(1, "little")
 
 
 def convert_to_pattern(s: list[str]) -> list[int | None]:
+    """
+    Convert list of the pattern tokens to a list of byte values or None if the token is "??".
+    """
     return [None if item == "??" else int(item, 16) for item in s]
 
 
 def load_patterns(filename: str = "fn_byte_patterns.ffsess") -> list[Pattern]:
+    """
+    Load patterns to a list from ffsess file.
+    """
     patterns = []
 
     with Path(filename).open() as patterns_file:
@@ -43,6 +56,9 @@ def load_patterns(filename: str = "fn_byte_patterns.ffsess") -> list[Pattern]:
 
 
 def group_patterns(patterns: list[Pattern]) -> Mapping[int, list[Pattern]]:
+    """
+    Group patterns by their first byte.
+    """
     patterns_dict = defaultdict(list)
     for pattern in patterns:
         patterns_dict[pattern.pattern[0]].append(pattern)
@@ -50,6 +66,9 @@ def group_patterns(patterns: list[Pattern]) -> Mapping[int, list[Pattern]]:
 
 
 def check_pattern(buffer: bytes, start_index: int, pattern: list[int | None]) -> bool:
+    """
+    Check if the pattern matches the buffer starting at the given index.
+    """
     for i, c in enumerate(pattern):
         if c is None:
             continue
