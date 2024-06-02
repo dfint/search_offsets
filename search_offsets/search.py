@@ -20,11 +20,10 @@ def search(path: str, patterns: list[Pattern]) -> Mapping[str, list[int]]:
 
     data = Path(path).read_bytes()
     for i, c in enumerate(data):
-        possible_patterns = patterns_dict.get(c)
-        if possible_patterns:
-            for pattern in possible_patterns:
-                if check_pattern(data, i, pattern.pattern):
-                    found[pattern.name].append(i)
+        possible_patterns = patterns_dict.get(c, [])
+        for pattern in possible_patterns:
+            if check_pattern(data, i, pattern.pattern):
+                found[pattern.name].append(i)
 
     return found
 
