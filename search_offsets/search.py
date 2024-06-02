@@ -1,6 +1,5 @@
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
-from operator import attrgetter
 from pathlib import Path
 
 import typer
@@ -14,25 +13,24 @@ from search_offsets.patterns import (
 )
 
 
-def search(path: str, patterns: list[Pattern]):
-    patterns_dict = group_patterns(patterns)
+def search(path: str, patterns: list[Pattern]) -> Mapping[str, list[int]]:
+    patterns_dict: Mapping[int, list[Pattern]] = group_patterns(patterns)
 
     found = defaultdict(list)
 
-    with open(path, "rb") as file:
-        data = file.read()
-        for i, c in enumerate(data):
-            possible_patterns = patterns_dict.get(c)
-            if possible_patterns:
-                for pattern in possible_patterns:
-                    if check_pattern(data, i, pattern.pattern):
-                        found[pattern.name].append(i)
+    data = Path(path).read_bytes()
+    for i, c in enumerate(data):
+        possible_patterns = patterns_dict.get(c)
+        if possible_patterns:
+            for pattern in possible_patterns:
+                if check_pattern(data, i, pattern.pattern):
+                    found[pattern.name].append(i)
 
     return found
 
 
-def print_found(section_table: SectionTable, patternt_names: Iterable[str], found: Mapping[str, int]):
-    for pattern in patternt_names:
+def print_found(section_table: SectionTable, pattern_names: Iterable[str], found: Mapping[str, int]) -> None:
+    for pattern in pattern_names:
         if not found[pattern]:
             print(f"{pattern}: NOT FOUND")
             continue
@@ -51,16 +49,16 @@ app = typer.Typer()
 
 
 @app.command()
-def main(path: Path):
-    patterns = load_patterns()
+def main(path: Path) -> None:
+    patterns: list[Pattern] = load_patterns()
 
-    with open(path, "rb") as exe:
+    with path.open("rb") as exe:
         pe = PortableExecutable(exe)
         print(f"checksum = 0x{pe.file_header.timedate_stamp:X}")
         section_table = pe.section_table
 
     found = search(path, patterns)
-    print_found(section_table, map(attrgetter("name"), patterns), found)
+    print_found(section_table, map(str, patterns), found)
 
 
 if __name__ == "__main__":

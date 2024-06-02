@@ -1,14 +1,20 @@
 from collections import defaultdict
 from collections.abc import Mapping
-from dataclasses import dataclass
+from pathlib import Path
+from typing import NamedTuple
 
 from more_itertools import chunked
 
 
-@dataclass
-class Pattern:
+class Pattern(NamedTuple):
     name: str
     pattern: bytes
+
+    def __str__(self) -> str:
+        return self.name
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(name={self.name!r}, pattern={self.pattern!r})"
 
 
 def hex_to_bytes(s: str) -> bytes:
@@ -16,14 +22,13 @@ def hex_to_bytes(s: str) -> bytes:
 
 
 def convert_to_pattern(s: list[str]) -> list[int | None]:
-    pattern = [None if item == "??" else int(item, 16) for item in s]
-    return pattern
+    return [None if item == "??" else int(item, 16) for item in s]
 
 
-def load_patterns(filename: str = "fn_byte_patterns.ffsess"):
+def load_patterns(filename: str = "fn_byte_patterns.ffsess") -> list[Pattern]:
     patterns = []
 
-    with open(filename) as patterns_file:
+    with Path(filename).open() as patterns_file:
         for tab_line, pattern_line in chunked(patterns_file, 2):
             command, _, tab_name = tab_line.rstrip().partition(" ")
             assert command == "Tab", command

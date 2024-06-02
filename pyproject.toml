@@ -14,8 +14,6 @@ typer = "^0.12.3"
 peclasses = {version = "^0.4.0", source = "dfint"}
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.4.2"
-isort = "^5.13.2"
 ruff = "^0.4.7"
 
 [tool.poetry.scripts]
@@ -37,8 +35,22 @@ line-length = 120
 profile = "black"
 
 [tool.ruff]
-line-length = 120
-select = ["E", "F", "UP"]
-ignore = ["UP015"]
-unfixable = ["F401"]
 target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D",
+    "T201",  # `print` found
+    "S101",  # Use of assert detected
+    "ANN101",  # Missing type annotation for self in method
+]
+unfixable = []
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    "S101",  # Don't warn about using of asserts in tests
+    "ANN201",  # Ignore "Missing return type annotation for public function", tests don't return anything
+    "D",  # Don't warn about missing documentation in tests
+]
