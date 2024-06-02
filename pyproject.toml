@@ -15,6 +15,8 @@ peclasses = {version = "^0.4.0", source = "dfint"}
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.7"
+pytest = "^8.2.1"
+hypothesis = "^6.103.0"
 
 [tool.poetry.scripts]
 search = "search_offsets.search:app"
