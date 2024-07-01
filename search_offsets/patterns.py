@@ -73,7 +73,7 @@ def check_pattern(buffer: bytes, start_index: int, pattern: list[int | None]) ->
         if c is None:
             continue
 
-        if buffer[start_index + i] != pattern[i]:
+        if buffer[start_index + i] != c:
             return False
 
     return True
