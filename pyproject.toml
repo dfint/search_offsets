@@ -12,6 +12,8 @@ python = "^3.10"
 more-itertools = "^10.3.0"
 typer = "^0.12.3"
 peclasses = {version = "^0.4.0", source = "dfint"}
+loguru = "^0.7.2"
+omegaconf = "^2.3.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.5.0"
@@ -19,7 +21,7 @@ pytest = "^8.2.2"
 hypothesis = "^6.104.2"
 
 [tool.poetry.scripts]
-search = "search_offsets.search:app"
+search = "search_offsets.search:main"
 
 [[tool.poetry.source]]
 name = "dfint"
@@ -51,6 +53,7 @@ ignore = [
     "D105",  # Missing docstring in magic method
     "D200",  # One-line docstring should fit on one line
     "D212",  # Multi-line docstring summary should start at the first line
+    "D401",  # First line should be in imperative mood
 ]
 unfixable = []
 

@@ -1,10 +1,12 @@
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
+from dataclasses import dataclass
 from pathlib import Path
 
-import typer
+from omegaconf import DictConfig
 from peclasses.portable_executable import PortableExecutable, SectionTable
 
+from search_offsets.config import with_config
 from search_offsets.patterns import (
     Pattern,
     check_pattern,
@@ -50,24 +52,26 @@ def print_found(section_table: SectionTable, pattern_names: Iterable[str], found
             print(f"{name} = 0x{rva:X}")
 
 
-app = typer.Typer()
+@dataclass
+class _Config:
+    path: Path
 
 
-@app.command()
-def main(path: Path) -> None:
+@with_config(_Config, ".config.yaml")
+def main(config: DictConfig) -> None:
     """
     Process the given portable executable file, print its checksum(time stamp) and offsets of the found patterns.
     """
     patterns: list[Pattern] = load_patterns()
 
-    with path.open("rb") as exe:
+    with config.path.open("rb") as exe:
         pe = PortableExecutable(exe)
         print(f"checksum = 0x{pe.file_header.timedate_stamp:X}")
         section_table = pe.section_table
 
-    found = search(path, patterns)
+    found = search(config.path, patterns)
     print_found(section_table, map(str, patterns), found)
 
 
 if __name__ == "__main__":
-    app()
+    main()
