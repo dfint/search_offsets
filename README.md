@@ -23,3 +23,5 @@ Alternatively, you can add a yaml config in the root of the project instead of u
 ```yaml
 path: "C:/path/to/Dwarf Fortress/Dwarf Fortress.exe"
 ```
+
+And then run the utility just with `poetry run search`.
