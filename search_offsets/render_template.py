@@ -16,5 +16,5 @@ def render_template(found: Mapping[str, list[int]], checksum: int, version_name:
     """
     env = Environment(loader=PackageLoader("search_offsets"), autoescape=select_autoescape())
     env.filters["hex"] = hex_filter
-    template = env.get_template("offsets_template.toml")
+    template = env.get_template("offsets.toml.jinja")
     return template.render(**found, checksum=checksum, version_name=version_name)
