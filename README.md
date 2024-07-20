@@ -25,3 +25,5 @@ path: "C:/path/to/Dwarf Fortress/Dwarf Fortress.exe"
 ```
 
 And then run the utility just with `poetry run search`.
+
+If `version_name` configuration is set, the offsets will be written into a ready to use toml file.
