@@ -35,13 +35,13 @@ def convert_to_pattern(s: list[str]) -> list[int | None]:
     return [None if item == "??" else int(item, 16) for item in s]
 
 
-def load_patterns(filename: str = "fn_byte_patterns.ffsess") -> list[Pattern]:
+def load_patterns(pattern_path: Path) -> list[Pattern]:
     """
     Load patterns to a list from ffsess file.
     """
     patterns = []
 
-    with Path(filename).open() as patterns_file:
+    with Path(pattern_path).open() as patterns_file:
         for tab_line, pattern_line in chunked(patterns_file, 2):
             command, _, tab_name = tab_line.rstrip().partition(" ")
             assert command == "Tab", command

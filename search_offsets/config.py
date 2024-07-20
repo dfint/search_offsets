@@ -5,7 +5,7 @@ from loguru import logger
 from omegaconf import DictConfig, OmegaConf
 
 
-def with_config(config_class: type, config_file: str) -> Callable[[Callable[[DictConfig], None]], Callable[[], None]]:
+def with_config(config_class: type, *config_files: str) -> Callable[[Callable[[DictConfig], None]], Callable[[], None]]:
     """
     A decorator to load the config file and merge it with the CLI options.
     """
@@ -16,10 +16,12 @@ def with_config(config_class: type, config_file: str) -> Callable[[Callable[[Dic
             config = OmegaConf.structured(config_class)
 
             config.merge_with(OmegaConf.from_cli())
-            try:
-                config.merge_with(OmegaConf.load(config_file))
-            except FileNotFoundError:
-                logger.info(f"Config {config_file} not found, using CLI options only")
+
+            for config_file in config_files:
+                try:
+                    config.merge_with(OmegaConf.load(config_file))
+                except FileNotFoundError:  # noqa: PERF203
+                    logger.info(f"Config {config_file} not found, using CLI options only")
 
             missing = ", ".join(OmegaConf.missing_keys(config))
             if missing:

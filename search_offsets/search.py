@@ -13,6 +13,9 @@ from search_offsets.patterns import (
     group_patterns,
     load_patterns,
 )
+from search_offsets.render_template import render_template
+
+root_dir = Path(__file__).parent.parent
 
 
 def search(path: str, patterns: list[Pattern]) -> Mapping[str, list[int]]:
@@ -55,14 +58,16 @@ def print_found(section_table: SectionTable, pattern_names: Iterable[str], found
 @dataclass
 class _Config:
     path: Path
+    patterns: Path
+    version_name: str | None
 
 
-@with_config(_Config, ".config.yaml")
+@with_config(_Config, "defaults.yaml", ".config.yaml")
 def main(config: DictConfig) -> None:
     """
     Process the given portable executable file, print its checksum(time stamp) and offsets of the found patterns.
     """
-    patterns: list[Pattern] = load_patterns()
+    patterns: list[Pattern] = load_patterns(config.patterns)
 
     with config.path.open("rb") as exe:
         pe = PortableExecutable(exe)
@@ -71,6 +76,11 @@ def main(config: DictConfig) -> None:
 
     found = search(config.path, patterns)
     print_found(section_table, map(str, patterns), found)
+
+    if config.get("version_name", None):
+        result = render_template(found, checksum=pe.file_header.timedate_stamp, version_name=config.version_name)
+        file_name =  f"offsets_{config.version_name.replace(' ', '_')}.toml"
+        (root_dir / file_name).write_text(result, encoding="utf-8")
 
 
 if __name__ == "__main__":
