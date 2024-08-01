@@ -18,7 +18,7 @@ jinja2 = "^3.1.4"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.5.5"
 pytest = "^8.3.2"
-hypothesis = "^6.104.2"
+hypothesis = "^6.108.5"
 
 [tool.poetry.scripts]
 search = "search_offsets.search:main"
