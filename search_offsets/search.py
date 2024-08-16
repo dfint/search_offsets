@@ -36,23 +36,24 @@ def search(path: str, patterns: list[Pattern]) -> Mapping[str, list[int]]:
     return found
 
 
-def print_found(section_table: SectionTable, pattern_names: Iterable[str], found: Mapping[str, int]) -> None:
+def process_found(section_table: SectionTable, pattern_names: Iterable[Pattern], found: Mapping[str, int]) -> dict[str, int]:
     """
     Print offsets of the found patterns.
     """
     for pattern in pattern_names:
-        if not found[pattern]:
-            print(f"{pattern}: NOT FOUND")
+        pattern_name = pattern.name
+        if not found[pattern_name]:
+            yield pattern_name, None
             continue
 
-        for i, offset in enumerate(found[pattern], -1):
+        for i, offset in enumerate(found[pattern_name], -1):
             suffix = "" if i < 0 else f"_{i}"
-            name = pattern + suffix
+            name = pattern_name + suffix
             if name == "addchar_0":
                 name = "addchar_top"
 
             rva = section_table.offset_to_rva(offset)
-            print(f"{name} = 0x{rva:X}")
+            yield name, rva
 
 
 @dataclass
@@ -75,10 +76,15 @@ def main(config: DictConfig) -> None:
         section_table = pe.section_table
 
     found = search(config.path, patterns)
-    print_found(section_table, map(str, patterns), found)
+    processed = dict(process_found(section_table, patterns, found))
+    for key, value in processed.items():
+        if value is None:
+            print(f"{key}: NOT FOUND")
+        else:
+            print(f"{key} = 0x{value:X}")
 
     if config.get("version_name", None):
-        result = render_template(found, checksum=pe.file_header.timedate_stamp, version_name=config.version_name)
+        result = render_template(processed, checksum=pe.file_header.timedate_stamp, version_name=config.version_name)
         file_name =  f"offsets_{config.version_name.replace(' ', '_')}.toml"
         (root_dir / file_name).write_text(result, encoding="utf-8")
 
