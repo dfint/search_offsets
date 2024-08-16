@@ -36,7 +36,11 @@ def search(path: str, patterns: list[Pattern]) -> Mapping[str, list[int]]:
     return found
 
 
-def process_found(section_table: SectionTable, pattern_names: Iterable[Pattern], found: Mapping[str, int]) -> dict[str, int]:
+def process_found(
+    section_table: SectionTable,
+    pattern_names: Iterable[Pattern],
+    found: Mapping[str, int],
+) -> Iterable[tuple[str, int]]:
     """
     Print offsets of the found patterns.
     """
@@ -85,7 +89,7 @@ def main(config: DictConfig) -> None:
 
     if config.get("version_name", None):
         result = render_template(processed, checksum=pe.file_header.timedate_stamp, version_name=config.version_name)
-        file_name =  f"offsets_{config.version_name.replace(' ', '_')}.toml"
+        file_name = f"offsets_{config.version_name.replace(' ', '_')}.toml"
         (root_dir / file_name).write_text(result, encoding="utf-8")
 
 
