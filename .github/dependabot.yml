@@ -17,8 +17,6 @@ updates:
       dev-dependencies:
         patterns:
           - "pytest*"
-          - "flake8*"
-          - "black"
-          - "isort"
+          - "hypothesis"
           - "mypy"
           - "ruff"
