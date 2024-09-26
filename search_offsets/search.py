@@ -64,7 +64,7 @@ def process_found(
 class _Config:
     path: Path
     patterns: Path
-    version_name: str | None
+    version_name: str | None = None
 
 
 @with_config(_Config, "defaults.yaml", ".config.yaml")
