@@ -16,9 +16,9 @@ omegaconf = "^2.3.0"
 jinja2 = "^3.1.4"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.6.3"
-pytest = "^8.3.2"
-hypothesis = "^6.111.2"
+ruff = "^0.6.8"
+pytest = "^8.3.3"
+hypothesis = "^6.112.2"
 
 [tool.poetry.scripts]
 search = "search_offsets.search:main"
