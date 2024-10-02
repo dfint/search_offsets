@@ -1,3 +1,8 @@
+[project]
+name = "search-offsets"
+version = "0.1.0"
+requires-python = ">=3.10"
+
 [tool.poetry]
 name = "search-offsets"
 version = "0.1.0"
@@ -27,6 +32,9 @@ search = "search_offsets.search:main"
 name = "dfint"
 url = "https://dfint.github.io/pypi-index/"
 priority = "explicit"
+
+[tool.uv]
+extra-index-url = ["https://dfint.github.io/pypi-index/"]
 
 [build-system]
 requires = ["poetry-core"]
