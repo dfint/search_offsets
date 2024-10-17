@@ -33,9 +33,6 @@ name = "dfint"
 url = "https://dfint.github.io/pypi-index/"
 priority = "explicit"
 
-[tool.uv]
-extra-index-url = ["https://dfint.github.io/pypi-index/"]
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

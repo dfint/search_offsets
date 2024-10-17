@@ -22,6 +22,8 @@
     uv run search path="C:/path/to/Dwarf Fortress/Dwarf Fortress.exe"
     ```
 
+    ([uv](https://github.com/astral-sh/uv) >= 0.4.23)
+
 Alternatively, you can add a yaml config in the root of the project instead of using the CLI options:
 
 `.config.yaml:`
@@ -30,6 +32,6 @@ Alternatively, you can add a yaml config in the root of the project instead of u
 path: "C:/path/to/Dwarf Fortress/Dwarf Fortress.exe"
 ```
 
-And then run the utility just with `poetry run search`.
+And then run the utility just with `poetry run search` (or `uv run search`).
 
 If `version_name` configuration is set, the offsets will be written into a ready to use toml file.
