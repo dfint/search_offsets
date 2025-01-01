@@ -18,7 +18,7 @@ more-itertools = "^10.5.0"
 peclasses = {version = "^0.4.0", source = "dfint"}
 loguru = "^0.7.2"
 omegaconf = "^2.3.0"
-jinja2 = "^3.1.4"
+jinja2 = "^3.1.5"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.4"
