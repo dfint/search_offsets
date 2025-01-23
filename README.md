@@ -22,7 +22,7 @@
     uv run search path="C:/path/to/Dwarf Fortress/Dwarf Fortress.exe"
     ```
 
-    ([uv](https://github.com/astral-sh/uv) >= 0.4.23)
+    ([uv](https://github.com/astral-sh/uv) >= [0.4.23](https://github.com/astral-sh/uv/releases/tag/0.4.23))
 
 Alternatively, you can add a yaml config in the root of the project instead of using the CLI options:
 
