@@ -5,6 +5,7 @@ from pathlib import Path
 
 from omegaconf import DictConfig
 from peclasses.portable_executable import PortableExecutable, SectionTable
+from rich import print  # noqa: A004
 
 from search_offsets.config import with_config
 from search_offsets.patterns import (
@@ -72,6 +73,11 @@ def main(config: DictConfig) -> None:
     """
     Process the given portable executable file, print its checksum(time stamp) and offsets of the found patterns.
     """
+    print(f"{config.path=}")
+    print(f"{config.patterns=}")
+    print(f"{config.version_name=}")
+    print()
+
     patterns: list[Pattern] = load_patterns(config.patterns)
 
     with config.path.open("rb") as exe:
