@@ -15,13 +15,13 @@ def with_config(config_class: type, *config_files: str) -> Callable[[Callable[[D
         def wrapper() -> None:
             config = OmegaConf.structured(config_class)
 
-            config.merge_with(OmegaConf.from_cli())
-
             for config_file in config_files:
                 try:
                     config.merge_with(OmegaConf.load(config_file))
                 except FileNotFoundError:  # noqa: PERF203
-                    logger.info(f"Config {config_file} not found, using CLI options only")
+                    logger.info(f"Config {config_file} not found")
+
+            config.merge_with(OmegaConf.from_cli())
 
             missing = ", ".join(OmegaConf.missing_keys(config))
             if missing:
