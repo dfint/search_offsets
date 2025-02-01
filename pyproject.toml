@@ -22,9 +22,9 @@ jinja2 = "^3.1.5"
 rich = "^13.9.4"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.8.4"
+ruff = "^0.9.4"
 pytest = "^8.3.4"
-hypothesis = "^6.123.2"
+hypothesis = "^6.124.9"
 
 [tool.poetry.scripts]
 search = "search_offsets.search:main"
