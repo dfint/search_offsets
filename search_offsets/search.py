@@ -3,8 +3,8 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
+import lief
 from omegaconf import DictConfig
-from peclasses.portable_executable import PortableExecutable, SectionTable
 from rich import print  # noqa: A004
 
 from search_offsets.config import with_config
@@ -38,7 +38,7 @@ def search(path: str, patterns: list[Pattern]) -> Mapping[str, list[int]]:
 
 
 def process_found(
-    section_table: SectionTable,
+    pe: lief.PE.Binary,
     pattern_names: Iterable[Pattern],
     found: Mapping[str, int],
 ) -> Iterable[tuple[str, int]]:
@@ -57,7 +57,7 @@ def process_found(
             if name == "addchar_0":
                 name = "addchar_top"
 
-            rva = section_table.offset_to_rva(offset)
+            rva = pe.offset_to_virtual_address(offset)
             yield name, rva
 
 
@@ -81,12 +81,12 @@ def main(config: DictConfig) -> None:
     patterns: list[Pattern] = load_patterns(config.patterns)
 
     with config.path.open("rb") as exe:
-        pe = PortableExecutable(exe)
-        print(f"checksum = 0x{pe.file_header.timedate_stamp:X}")
-        section_table = pe.section_table
+        pe = lief.PE.parse(exe)
+        checksum = pe.header.time_date_stamps
+        print(f"checksum = 0x{checksum:X}")
 
     found = search(config.path, patterns)
-    processed = dict(process_found(section_table, patterns, found))
+    processed = dict(process_found(pe, patterns, found))
     for key, value in processed.items():
         if value is None:
             print(f"{key}: NOT FOUND")
@@ -94,7 +94,7 @@ def main(config: DictConfig) -> None:
             print(f"{key} = 0x{value:X}")
 
     if config.get("version_name", None):
-        result = render_template(processed, checksum=pe.file_header.timedate_stamp, version_name=config.version_name)
+        result = render_template(processed, checksum=checksum, version_name=config.version_name)
         file_name = f"offsets_{config.version_name.replace(' ', '_')}.toml"
         (root_dir / file_name).write_text(result, encoding="utf-8")
 

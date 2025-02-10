@@ -125,6 +125,58 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "lief"
+version = "0.16.3"
+description = "Library to instrument executable formats"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "lief-0.16.3-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:0fca20122c27a86efb5d083fef6514fb2fbd910965654cb8568f2db8dfe2678f"},
+    {file = "lief-0.16.3-cp310-cp310-macosx_11_0_x86_64.whl", hash = "sha256:17e78fc2790fd4ebd15cf9fd86abf0d7fa91aa229d70707f0bc0391ba522129c"},
+    {file = "lief-0.16.3-cp310-cp310-manylinux2014_aarch64.whl", hash = "sha256:6bd8fe4d8b907cd7e024789ba3070e417e9bff50ac13698b43b4d992f30f32d2"},
+    {file = "lief-0.16.3-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:d3811e76a2da6e5e351cc2dd09ea34c1fc30e5dd2d6cbbfcd5344dfeb39e0119"},
+    {file = "lief-0.16.3-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:978469619f5e8c3faa5bcbb94a89df49565a427b2e75267924f76a7f42cd2a0f"},
+    {file = "lief-0.16.3-cp310-cp310-win32.whl", hash = "sha256:9e6cf12c2e032e61f8a60512877b3408cf7c0bc8b76f6bc3e830435397a6555d"},
+    {file = "lief-0.16.3-cp310-cp310-win_amd64.whl", hash = "sha256:6b4370508c8b82173e961372310e9c3d410c314cb60dadd80f2acb1a20197265"},
+    {file = "lief-0.16.3-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:edf5e1479195920b654e3e1eb6863d466a67fd1bbd2ecc7dcbf2eeeb05353a0c"},
+    {file = "lief-0.16.3-cp311-cp311-macosx_11_0_x86_64.whl", hash = "sha256:988889a7e837d12f400011bf6fb91197a94abda51e2e7c135e31ba09b032c718"},
+    {file = "lief-0.16.3-cp311-cp311-manylinux2014_aarch64.whl", hash = "sha256:789bf8fd6cf64fe678b4273797e882c0bd81b702f75c3775c9f175225e1ecad7"},
+    {file = "lief-0.16.3-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:73a7bcaf2c2d1819e2c46b3548d29e8bc2c0547be30beb8394ea58c19afa6cab"},
+    {file = "lief-0.16.3-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:be2e7074c8bf0c10fcb1afd8dedb404c86c700123a856208d03ce9dd018392d5"},
+    {file = "lief-0.16.3-cp311-cp311-win32.whl", hash = "sha256:8fafd992eb9dfca9d8e39e4b4218682bcbf60fd88f43bf198ce8cb20a6674b2e"},
+    {file = "lief-0.16.3-cp311-cp311-win_amd64.whl", hash = "sha256:4eb179e9a34a37edbe72c80c0ef7a93cd9ebee4e8fe27165f96841a9d00e1adb"},
+    {file = "lief-0.16.3-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:17a57cc7accb27ef84a2af395dfcd1ff5c1dabb27a90fda269327678a18a22f0"},
+    {file = "lief-0.16.3-cp312-cp312-macosx_11_0_x86_64.whl", hash = "sha256:1e79e7ad2bd822c19303b722e5239976521bc1777a2ddadccdc65db68eb5088d"},
+    {file = "lief-0.16.3-cp312-cp312-manylinux2014_aarch64.whl", hash = "sha256:c2b205a5f2bb7c2e355ca5ccc71801774af1d40758fa1e338f72678367321efe"},
+    {file = "lief-0.16.3-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:684f49352123230603369eea032a49f7fe0992624c5ba2120edbd62d974893be"},
+    {file = "lief-0.16.3-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:bf85ff0b4f1c70c3a37c9be5a38c213c84cef6691083fd1ffa6980a4a0d5a410"},
+    {file = "lief-0.16.3-cp312-cp312-win32.whl", hash = "sha256:e7ba797829584c5cc1c8a736b2f1587f09b1f3030239c968c7664649fb79ae15"},
+    {file = "lief-0.16.3-cp312-cp312-win_amd64.whl", hash = "sha256:70c1f5f66bd4eeead2853a7a80d941b4dd03e3791c68c5351b0d39c78cfa9afe"},
+    {file = "lief-0.16.3-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:95d09183fb4db9dd1534eecc8b36b714bcddf2831cd6c56499b10346e48b2a77"},
+    {file = "lief-0.16.3-cp313-cp313-macosx_11_0_x86_64.whl", hash = "sha256:366205cf382cc246e36d855c7286af6a9e85994fbac47a0a00c206c4f21c998f"},
+    {file = "lief-0.16.3-cp313-cp313-manylinux2014_aarch64.whl", hash = "sha256:6ec906f209e275fd57bc2b003bee6f0e70b9ceabf5d93bcea8de0684735cbe8c"},
+    {file = "lief-0.16.3-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:e0b151eccbeda0fe666448c0801022ec5aa92b7383c0a0e8ca586931fd1bfff0"},
+    {file = "lief-0.16.3-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:2eb80b1344a009e27702a7ee0ffa7013d792c0d7237e6871fe28210eac8446c0"},
+    {file = "lief-0.16.3-cp313-cp313-win32.whl", hash = "sha256:aefbe78b06d9e89387ab8fc069d1cb34252f5916cf35eaa21088b21b74b99d08"},
+    {file = "lief-0.16.3-cp313-cp313-win_amd64.whl", hash = "sha256:52dc05445d8019b61a9ab8c6eb9d6238c4346ac692dcecca76d5f329a999216e"},
+    {file = "lief-0.16.3-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:9d7583d11d596afc723b664390d61e1e6d7988b3ad160bfb7438f2cd43099170"},
+    {file = "lief-0.16.3-cp38-cp38-macosx_11_0_x86_64.whl", hash = "sha256:bca81d5e2be50925f8e04bb14f02496a14572bb1e326405468afb8a8c11ec508"},
+    {file = "lief-0.16.3-cp38-cp38-manylinux2014_aarch64.whl", hash = "sha256:51df4e1c1bc52caa90d5ad63dfd587cd737dde1274f6935bf034f7628c87d5a4"},
+    {file = "lief-0.16.3-cp38-cp38-manylinux_2_28_x86_64.whl", hash = "sha256:b76cf0b8dcce6e3ca88f6e721d471b8ae02192f662c896204285c9561a602e1b"},
+    {file = "lief-0.16.3-cp38-cp38-musllinux_1_2_x86_64.whl", hash = "sha256:e924ee22ae6dd5ac660768b46e42ef19bba2a6faf680adcd70aebc536e1ecffb"},
+    {file = "lief-0.16.3-cp38-cp38-win32.whl", hash = "sha256:489a3e77805ebd31f38c9a2786cfddf65c8cca428fa017f7ee38b006143fd3a0"},
+    {file = "lief-0.16.3-cp38-cp38-win_amd64.whl", hash = "sha256:558570ffbb356a8a8f8e2e35cc37edb08ef019ec5fc087f4ed764573071a0901"},
+    {file = "lief-0.16.3-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:bb2d0eb59919f3ca8562a8fbae55e4d07194135063f05cfe314c8405cd2d4cce"},
+    {file = "lief-0.16.3-cp39-cp39-macosx_11_0_x86_64.whl", hash = "sha256:f18573e16b53ff9626eaa242e8d00a9780107d39a41eb4698c07a965c2267fc9"},
+    {file = "lief-0.16.3-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:6f5155f382f3da85262465817196a3890124c2483b52a2a15acfdc006155296f"},
+    {file = "lief-0.16.3-cp39-cp39-manylinux_2_28_x86_64.whl", hash = "sha256:3a473aa8557df517d7d520235cd785d0a83d543eda0090ca657a7899980695a0"},
+    {file = "lief-0.16.3-cp39-cp39-musllinux_1_2_x86_64.whl", hash = "sha256:0b7dc44137c35e4e7c55278369f6148c8893128d694ddce1d28f4822967e5756"},
+    {file = "lief-0.16.3-cp39-cp39-win32.whl", hash = "sha256:d29480db4cbf212c7deca4b544e4eef6923d1203083518ab0f0f597411e80e51"},
+    {file = "lief-0.16.3-cp39-cp39-win_amd64.whl", hash = "sha256:e0ebd06459fad54c5ad9a3caf3e3a7e3010811f51068cbd550c4ae1ee28a9b89"},
+]
+
+[[package]]
 name = "loguru"
 version = "0.7.3"
 description = "Python logging made (stupidly) simple"
@@ -290,22 +342,6 @@ files = [
     {file = "packaging-24.2-py3-none-any.whl", hash = "sha256:09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759"},
     {file = "packaging-24.2.tar.gz", hash = "sha256:c228a6dc5e932d346bc5739379109d49e8853dd8223571c7c5b55260edc0b97f"},
 ]
-
-[[package]]
-name = "peclasses"
-version = "0.4.0"
-description = ""
-optional = false
-python-versions = ">=3.7,<4.0"
-groups = ["main"]
-files = [
-    {file = "peclasses-0.4.0-py3-none-any.whl", hash = "sha256:0354c5b4f0937eba667a9e34d8917ecaf6b1108aa3c50f62704ce2e51ed34652"},
-]
-
-[package.source]
-type = "legacy"
-url = "https://dfint.github.io/pypi-index"
-reference = "dfint"
 
 [[package]]
 name = "pluggy"
@@ -559,4 +595,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "c21ce2bcb3fb79f09925993541cd0b45d8f2504cfa28b7a597639caf3fa1c2a5"
+content-hash = "7d8a9ccece01f6671fe145b5c359d8ea9f576fb222f44b3b10b61d3be00194a1"
