@@ -29,16 +29,6 @@ hypothesis = "^6.123.2"
 [tool.poetry.scripts]
 search = "search_offsets.search:main"
 
-[[tool.poetry.source]]
-name = "dfint"
-url = "https://dfint.github.io/pypi-index/"
-priority = "explicit"
-
-[[tool.uv.index]]
-name = "dfint"
-url = "https://dfint.github.io/pypi-index/"
-priority = "explicit"
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
