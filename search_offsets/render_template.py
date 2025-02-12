@@ -27,5 +27,5 @@ def render_template(found: Mapping[str, list[int]], checksum: int, version_name:
     Render the template with the found offsets.
     """
     env = init_jinja_env()
-    template = env.get_template("offsets.toml.jinja")
+    template = env.get_template("windows_offsets.toml.jinja")
     return template.render(**found, checksum=checksum, version_name=version_name)
