@@ -44,7 +44,7 @@ def process_found(
     found: Mapping[str, int],
 ) -> Iterable[tuple[str, int]]:
     """
-    Prepare found offsets to pringing.
+    Prepare found offsets to printing.
     """
     for pattern in pattern_names:
         pattern_name = pattern.name
