@@ -91,8 +91,6 @@ def main(config: DictConfig) -> None:
     print(f"{config.version_name=}")
     print()
 
-    patterns: list[Pattern] = load_patterns(config.patterns)
-
     is_pe_binary = False
     with config.path.open("rb") as executable:
         parsed_binary = lief.parse(executable)
@@ -118,6 +116,7 @@ def main(config: DictConfig) -> None:
         found = {}
         template_name = "linux_offsets.toml.jinja"
     else:
+        patterns = load_patterns(config.patterns)
         found = search_offsets(config.path, patterns)
         print_offsets(parsed_binary, patterns, found)
         template_name = "windows_offsets.toml.jinja"
