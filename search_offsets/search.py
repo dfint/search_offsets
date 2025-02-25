@@ -9,6 +9,7 @@ from omegaconf import DictConfig
 from rich import print  # noqa: A004
 
 from search_offsets.config import with_config
+from search_offsets.detect_df_version import detect_df_version
 from search_offsets.patterns import (
     Pattern,
     check_pattern,
@@ -111,6 +112,10 @@ def main(config: DictConfig) -> None:
             raise TypeError(msg)
 
         print(f"checksum = 0x{checksum:X}")
+
+        executable.seek(0)
+        version = detect_df_version(executable.read())
+        print(f"Detected DF version = {version}")
 
     if not is_pe_binary:
         found = {}
