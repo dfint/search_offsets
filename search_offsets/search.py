@@ -124,6 +124,10 @@ def main(config: DictConfig) -> None:
         patterns = load_patterns(config.patterns)
         found = search_offsets(config.path, patterns)
         print_offsets(parsed_binary, patterns, found)
+        if any(not row for row in found.values()):
+            print("Not all offsets are found")
+            return
+
         template_name = "windows_offsets.toml.jinja"
 
     version_name = config.get("version_name", None)
