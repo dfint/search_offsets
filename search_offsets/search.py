@@ -10,6 +10,7 @@ from rich import print  # noqa: A004
 
 from search_offsets.config import with_config
 from search_offsets.detect_df_version import detect_df_version
+from search_offsets.detect_steam_api import detect_steam_api
 from search_offsets.patterns import (
     Pattern,
     check_pattern,
@@ -116,6 +117,9 @@ def main(config: DictConfig) -> None:
         executable.seek(0)
         version = detect_df_version(executable.read())
         print(f"Detected DF version = {version}")
+
+        steam_detected = detect_steam_api(parsed_binary)
+        print(f"Steam api detected: {steam_detected}")
 
     if not is_pe_binary:
         found = {}
