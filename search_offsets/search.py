@@ -46,7 +46,7 @@ def process_found(
     found: Mapping[str, int],
 ) -> Iterable[tuple[str, int]]:
     """
-    Prepare found offsets to printing.
+    Prepare found offsets for template rendering.
     """
     for pattern in pattern_names:
         pattern_name = pattern.name
@@ -64,12 +64,11 @@ def process_found(
             yield name, rva
 
 
-def print_offsets(pe: lief.PE.Binary, pattern_names: Iterable[Pattern], found: Mapping[str, int]) -> None:
+def print_offsets(offsets: Mapping[str, int]) -> None:
     """
     Print found offsets to the console.
     """
-    processed = dict(process_found(pe, pattern_names, found))
-    for key, value in processed.items():
+    for key, value in offsets.items():
         if value is None:
             print(f"{key}: NOT FOUND")
         else:
@@ -122,13 +121,14 @@ def main(config: DictConfig) -> None:
         print(f"Steam api detected: {steam_detected}")
 
     if not is_pe_binary:
-        found = {}
+        processed = {}
         template_name = "linux_offsets.toml.jinja"
     else:
         patterns = load_patterns(config.patterns)
         found = search_offsets(config.path, patterns)
-        print_offsets(parsed_binary, patterns, found)
-        if any(not row for row in found.values()):
+        processed = dict(process_found(parsed_binary, patterns, found))
+        print_offsets(processed)
+        if any(not row for row in processed.values()):
             print("Not all offsets are found")
             return
 
@@ -138,7 +138,7 @@ def main(config: DictConfig) -> None:
     if version_name:
         jinja_env = init_jinja_env()
         template = jinja_env.get_template(template_name)
-        result = template.render(**found, checksum=checksum, version_name=version_name)
+        result = template.render(**processed, checksum=checksum, version_name=version_name)
         file_name = f"offsets_{config.version_name.replace(' ', '_')}.toml"
         (root_dir / file_name).write_text(result, encoding="utf-8")
         print(f"Created {file_name} file")
