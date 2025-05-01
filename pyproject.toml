@@ -14,7 +14,7 @@ packages = [{include = "search_offsets"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-more-itertools = "^10.5.0"
+more-itertools = "^10.7.0"
 loguru = "^0.7.3"
 omegaconf = "^2.3.0"
 jinja2 = "^3.1.6"
