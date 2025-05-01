@@ -22,9 +22,9 @@ rich = "^14.0.0"
 lief = "^0.16.5"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.11.2"
+ruff = "^0.11.8"
 pytest = "^8.3.5"
-hypothesis = "^6.130.6"
+hypothesis = "^6.131.9"
 
 [tool.poetry.scripts]
 search = "search_offsets.search:main"
