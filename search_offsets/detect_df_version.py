@@ -5,7 +5,7 @@ pattern = re.compile(rb"\x00((\d+)\.(\d+)(\-([^\d]+)(\d*))?)\x00")
 MAX_BETA = 10000
 
 
-def version_comparing_key(value: re.Match[bytes]) -> tuple[int, int, int]:
+def version_comparing_key(value: re.Match[bytes]) -> tuple[int, int, str, int]:
     """
     Return a tuple of (major, minor, beta) used for detecting max version number in the executable.
     """
