@@ -1,4 +1,6 @@
-import re
+import operator
+from collections.abc import Callable
+from typing import Any
 
 import pytest
 
@@ -20,14 +22,14 @@ def test_detect_df_version(data: bytes, expected: str | None) -> None:
 
 
 @pytest.mark.parametrize(
-    ("left", "right", "greater"),
+    ("left", "right", "comparison_operator"),
     [
-        (b"\x0051.01\x00", b"\x0051.01-beta1\x00", True),
+        (b"\x0051.01\x00", b"\x0051.01-beta1\x00", operator.gt),
     ],
 )
-def test_version_comparing_key(*, left: bytes, right: bytes, greater: bool):
+def test_version_comparing_key(*, left: bytes, right: bytes, comparison_operator: Callable[[Any, Any], bool]):
     match_left = pattern.search(left)
     assert match_left is not None
     match_right = pattern.search(right)
     assert match_right is not None
-    assert (version_comparing_key(match_left) > version_comparing_key(match_right)) == greater
+    assert comparison_operator(version_comparing_key(match_left), version_comparing_key(match_right))
