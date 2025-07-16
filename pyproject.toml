@@ -43,11 +43,13 @@ ignore = [
     "T201",  # `print` found
     "S101",  # Use of assert detected
     "D100",  # Missing docstring in public module
+    "D101",
     "D104",  # Missing docstring in public package
     "D105",  # Missing docstring in magic method
     "D200",  # One-line docstring should fit on one line
     "D212",  # Multi-line docstring summary should start at the first line
     "D401",  # First line should be in imperative mood
+    "PLR0911",
 ]
 unfixable = []
 

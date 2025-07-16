@@ -1,10 +1,6 @@
-import operator
-from collections.abc import Callable
-from typing import Any
-
 import pytest
 
-from search_offsets.detect_df_version import detect_df_version, pattern, version_comparing_key
+from search_offsets.detect_df_version import VersionInfo, detect_df_version
 
 
 @pytest.mark.parametrize(
@@ -22,14 +18,17 @@ def test_detect_df_version(data: bytes, expected: str | None) -> None:
 
 
 @pytest.mark.parametrize(
-    ("left", "right", "comparison_operator"),
+    ("left", "right", "comparison_result"),
     [
-        (b"\x0051.01\x00", b"\x0051.01-beta1\x00", operator.gt),
+        (VersionInfo(51, 0), VersionInfo(51, 0), 0),
+        (VersionInfo(51, 0), VersionInfo(50, 0), 1),
+        (VersionInfo(51, 0), VersionInfo(52, 0), -1),
+        (VersionInfo(51, 1), VersionInfo(51, 0), 1),
+        (VersionInfo(51, 1), VersionInfo(51, 2), -1),
+        (VersionInfo(51, 1), VersionInfo(51, 1, b"beta", 1), 1),
+        (VersionInfo(51, 1, b"beta", 2), VersionInfo(51, 1, b"beta", 1), 1),
+        (VersionInfo(51, 1, b"beta", 1), VersionInfo(51, 1, b"zeta", 1), -1),
     ],
 )
-def test_version_comparing_key(*, left: bytes, right: bytes, comparison_operator: Callable[[Any, Any], bool]):
-    match_left = pattern.search(left)
-    assert match_left is not None
-    match_right = pattern.search(right)
-    assert match_right is not None
-    assert comparison_operator(version_comparing_key(match_left), version_comparing_key(match_right))
+def test_version_comparing_key(*, left: VersionInfo, right: VersionInfo, comparison_result: int):
+    assert left.compare(right) == comparison_result
