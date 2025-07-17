@@ -1,3 +1,7 @@
+import operator
+from collections.abc import Callable
+from typing import Any
+
 import pytest
 
 from search_offsets.detect_df_version import VersionInfo, detect_df_version
@@ -18,17 +22,17 @@ def test_detect_df_version(data: bytes, expected: str | None) -> None:
 
 
 @pytest.mark.parametrize(
-    ("left", "right", "comparison_result"),
+    ("left", "right", "comparison"),
     [
-        (VersionInfo(51, 0), VersionInfo(51, 0), 0),
-        (VersionInfo(51, 0), VersionInfo(50, 0), 1),
-        (VersionInfo(51, 0), VersionInfo(52, 0), -1),
-        (VersionInfo(51, 1), VersionInfo(51, 0), 1),
-        (VersionInfo(51, 1), VersionInfo(51, 2), -1),
-        (VersionInfo(51, 1), VersionInfo(51, 1, b"beta", 1), 1),
-        (VersionInfo(51, 1, b"beta", 2), VersionInfo(51, 1, b"beta", 1), 1),
-        (VersionInfo(51, 1, b"beta", 1), VersionInfo(51, 1, b"zeta", 1), -1),
+        (VersionInfo(51, 0), VersionInfo(51, 0), operator.eq),
+        (VersionInfo(52, 0), VersionInfo(50, 0), operator.gt),
+        (VersionInfo(51, 0), VersionInfo(52, 0), operator.lt),
+        (VersionInfo(51, 1), VersionInfo(51, 0), operator.gt),
+        (VersionInfo(51, 1), VersionInfo(51, 2), operator.lt),
+        (VersionInfo(51, 1), VersionInfo(51, 1, b"beta", 1), operator.gt),
+        (VersionInfo(51, 1, b"beta", 2), VersionInfo(51, 1, b"beta", 1), operator.gt),
+        (VersionInfo(51, 1, b"beta", 1), VersionInfo(51, 1, b"zeta", 1), operator.lt),
     ],
 )
-def test_version_comparing_key(*, left: VersionInfo, right: VersionInfo, comparison_result: int):
-    assert left.compare(right) == comparison_result
+def test_version_comparing_key(*, left: VersionInfo, right: VersionInfo, comparison: Callable[[Any, Any], bool]):
+    assert comparison(left.compare(right), 0)
