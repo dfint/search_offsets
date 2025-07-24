@@ -75,6 +75,20 @@ def print_offsets(offsets: Mapping[str, int]) -> None:
             print(f"{key} = 0x{value:X}")
 
 
+def change_dir_path_to_file_path(path: Path) -> Path:
+    """Change directory path to file path if needed."""
+    if path.is_file():
+        return path
+
+    for file_name in ("Dwarf Fortress.exe", "dwarfort"):
+        file_path = path / file_name
+        if file_path.exists():
+            print(f"Directory path changed to file path: {file_path!r}")
+            return file_path
+
+    return path
+
+
 @dataclass
 class _Config:
     path: Path
@@ -93,6 +107,8 @@ def main(config: DictConfig) -> None:  # noqa: PLR0915
     print(f"{config.version_name=}")
     print(f"{config.autogenerate_version_name=}")
     print()
+
+    config.path = change_dir_path_to_file_path(config.path)
 
     is_pe_binary = False
     with config.path.open("rb") as executable:
