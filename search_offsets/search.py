@@ -84,7 +84,7 @@ class _Config:
 
 
 @with_config(_Config, "defaults.yaml", ".config.yaml")
-def main(config: DictConfig) -> None:
+def main(config: DictConfig) -> None:  # noqa: PLR0915
     """
     Process the given portable executable file, print its checksum (time stamp) and offsets of the found patterns.
     """
