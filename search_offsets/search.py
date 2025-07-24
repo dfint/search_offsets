@@ -80,6 +80,7 @@ class _Config:
     path: Path
     patterns: Path
     version_name: str | None = None
+    autogenerate_version_name: bool = False
 
 
 @with_config(_Config, "defaults.yaml", ".config.yaml")
@@ -90,6 +91,7 @@ def main(config: DictConfig) -> None:
     print(f"{config.path=}")
     print(f"{config.patterns=}")
     print(f"{config.version_name=}")
+    print(f"{config.autogenerate_version_name=}")
     print()
 
     is_pe_binary = False
@@ -119,6 +121,12 @@ def main(config: DictConfig) -> None:
 
         steam_detected = detect_steam_api(parsed_binary)
         print(f"Steam api detected: {steam_detected}")
+
+        if config.autogenerate_version_name:
+            steam = "steam" if steam_detected else "other"
+            os_part = "win64" if isinstance(parsed_binary, lief.PE.Binary) else "linux64"
+            config.version_name = f"{version} {steam} {os_part}"
+            print(f"Generated version name: {config.version_name}")
 
     if not is_pe_binary:
         processed = {}
