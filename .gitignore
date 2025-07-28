@@ -161,6 +161,3 @@ cython_debug/
 
 /offsets_*.toml
 .config.yaml
-
-# Disable watching of uv.lock until full migration from poetry to uv
-uv.lock

@@ -4,19 +4,9 @@
 
 1. Install python 3.10
 
-2. Install poetry:
-
-    ```shell
-    pip install poetry
-    ```
+2. Install uv: [Installing uv](https://docs.astral.sh/uv/getting-started/installation/)
 
 3. Run search:
-
-    ```shell
-    poetry run search path="C:/path/to/Dwarf Fortress/Dwarf Fortress.exe"
-    ```
-
-    or using [uv](https://github.com/astral-sh/uv):
 
     ```shell
     uv run search path="C:/path/to/Dwarf Fortress/Dwarf Fortress.exe"
@@ -30,7 +20,7 @@ Alternatively, you can add a yaml config in the root of the project instead of u
 path: "C:/path/to/Dwarf Fortress/Dwarf Fortress.exe"
 ```
 
-And then run the utility just with `poetry run search` (or `uv run search`).
+And then run the utility just with `uv run search`.
 
 If `version_name` configuration is set, the offsets will be written into a ready to use toml file.
 
