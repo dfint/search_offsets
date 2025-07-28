@@ -4,7 +4,7 @@
 
 1. Install python 3.10
 
-2. Install uv: [Installing uv](https://docs.astral.sh/uv/getting-started/installation/)
+2. [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
 
 3. Run search:
 
