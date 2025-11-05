@@ -6,7 +6,7 @@ from search_offsets.patterns import convert_to_pattern, hex_to_bytes
 
 
 @given(st.integers(0, 255))
-def test_hex_to_bytes(byte: int):
+def test_hex_to_bytes(byte: int) -> None:
     assert hex_to_bytes(f"{byte:02X}") == byte.to_bytes(1, "little")
 
 
@@ -18,5 +18,5 @@ def test_hex_to_bytes(byte: int):
         (["FF", "??"], [255, None]),
     ],
 )
-def test_convert_to_pattern(pattern: list[str], expected: list[int | None]):
+def test_convert_to_pattern(pattern: list[str], expected: list[int | None]) -> None:
     assert convert_to_pattern(pattern) == expected

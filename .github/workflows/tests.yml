@@ -48,7 +48,7 @@ jobs:
       run: uv run ruff check . --statistics
   
     - name: Check using mypy
-      run: uv run mypy .
+      run: uv run mypy . --strict
 
     - name: Test with pytest
       run: uv run pytest #--cov=./
