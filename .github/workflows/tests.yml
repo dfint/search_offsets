@@ -46,7 +46,10 @@ jobs:
 
     - name: Lint with ruff
       run: uv run ruff check . --statistics
-  
+
+    - name: Cache mypy cache
+      uses: AustinScola/mypy-cache-github-action@v1
+
     - name: Check using mypy
       run: uv run mypy . --strict
 
