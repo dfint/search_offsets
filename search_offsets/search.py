@@ -118,6 +118,7 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
         print(f"Directory path changed to file path: {file_path!r}")
 
     is_pe_binary = False
+    version_name = config.get("version_name", None)
     with file_path.open("rb") as executable:
         parsed_binary = lief.parse(executable)
         if parsed_binary is None:
@@ -148,8 +149,8 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
         if config.autogenerate_version_name:
             steam = "steam" if steam_detected else "other"
             os_part = "win64" if isinstance(parsed_binary, lief.PE.Binary) else "linux64"
-            config.version_name = f"{version} {steam} {os_part}"
-            print(f"Generated version name: {config.version_name}")
+            version_name = f"{version} {steam} {os_part}"
+            print(f"Generated version name: {version_name}")
 
     if not is_pe_binary:
         processed = {}
@@ -165,7 +166,6 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
 
         template_name = "windows_offsets.toml.jinja"
 
-    version_name = config.get("version_name", None)
     if version_name:
         jinja_env = init_jinja_env()
         template = jinja_env.get_template(template_name)
