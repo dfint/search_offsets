@@ -61,6 +61,9 @@ def process_found(
                 name = "addchar_top"
 
             rva = pe.offset_to_virtual_address(offset)
+            if isinstance(rva, lief.lief_errors):
+                msg = f"Error ocurred during getting of virtual address: {rva!r}"
+                raise RuntimeError(msg)  # noqa: TRY004
             yield name, rva
 
 
