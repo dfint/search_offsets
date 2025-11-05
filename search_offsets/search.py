@@ -86,7 +86,6 @@ def change_dir_path_to_file_path(path: Path) -> Path | None:
     for file_name in ("Dwarf Fortress.exe", "dwarfort"):
         file_path = path / file_name
         if file_path.exists():
-            print(f"Directory path changed to file path: {file_path!r}")
             return file_path
 
     return None
@@ -114,6 +113,9 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
     if file_path is None:
         print("Executable file not found. Skipping.")
         return
+
+    if path != file_path:
+        print(f"Directory path changed to file path: {file_path!r}")
 
     is_pe_binary = False
     with file_path.open("rb") as executable:
