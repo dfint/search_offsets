@@ -43,7 +43,7 @@ class VersionInfo(NamedTuple):
         """
         try:
             beta_number = int(value.group(6))
-        except ValueError:
+        except (ValueError, TypeError):
             beta_number = None
 
         return cls(
