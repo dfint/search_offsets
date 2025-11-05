@@ -8,7 +8,7 @@ def hex_filter(value: int) -> str:
     try:
         return f"0x{value:X}"
     except TypeError:
-        return value
+        return str(value)
 
 
 def init_jinja_env() -> Environment:

@@ -41,11 +41,16 @@ class VersionInfo(NamedTuple):
         """
         Create a VersionInfo object from a regex match.
         """
+        try:
+            beta_number = int(value.group(6))
+        except ValueError:
+            beta_number = 0
+
         return cls(
             major = int(value.group(2)),
             minor = int(value.group(3)),
             beta_text = value.group(5),
-            beta_number = value.group(6),
+            beta_number = beta_number,
         )
 
 
@@ -56,7 +61,7 @@ def match_comparator(left: re.Match[bytes], right: re.Match[bytes]) -> int:
     return VersionInfo.from_match(left).compare(VersionInfo.from_match(right))
 
 
-def detect_df_version(data: bytes) -> str:
+def detect_df_version(data: bytes) -> str | None:
     """
     Try to detect the version of Dwarf Fortress.
     """

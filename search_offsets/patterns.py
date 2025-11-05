@@ -1,5 +1,5 @@
 from collections import defaultdict
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import NamedTuple
 
@@ -12,7 +12,7 @@ class Pattern(NamedTuple):
     """
 
     name: str
-    pattern: bytes
+    pattern: Sequence[int | None]
 
     def __str__(self) -> str:
         return self.name
@@ -65,7 +65,7 @@ def group_patterns(patterns: list[Pattern]) -> Mapping[int, list[Pattern]]:
     return patterns_dict
 
 
-def check_pattern(buffer: bytes, start_index: int, pattern: list[int | None] | bytes) -> bool:
+def check_pattern(buffer: bytes, start_index: int, pattern: Sequence[int | None]) -> bool:
     """
     Check if the pattern matches the buffer starting at the given index.
     """

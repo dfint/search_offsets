@@ -10,6 +10,7 @@ from search_offsets.detect_df_version import VersionInfo, detect_df_version
 @pytest.mark.parametrize(
     ("data", "expected"),
     [
+        (b"", None),
         (b"\x0051.01-beta1\x00", "51.01-beta1"),
         (b"\x0051.02\x00", "51.02"),
         (b"\x0051.03-foo\x00", "51.03-foo"),
