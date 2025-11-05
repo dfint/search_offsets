@@ -169,6 +169,9 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
 
 @with_config(_Config, "defaults.yaml", ".config.yaml")
 def main(config: DictConfig) -> None:
+    """
+    Find DF executables in directories described by glob pattern in config.path, get offsets from executables.
+    """
     for path in Path().rglob(config.path):
         if path.is_dir():
             process_game_directory(config, path)
