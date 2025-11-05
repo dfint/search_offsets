@@ -40,7 +40,7 @@ def search_offsets(path: str | Path, patterns: list[Pattern]) -> Mapping[str, li
     return found
 
 
-def process_found(
+def process_offsets(
     pe: lief.PE.Binary | lief.ELF.Binary,
     pattern_names: Iterable[Pattern],
     found: Mapping[str, list[int]],
@@ -158,7 +158,7 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
     else:
         patterns = load_patterns(config.patterns)
         found = search_offsets(file_path, patterns)
-        processed = dict(process_found(parsed_binary, patterns, found))
+        processed = dict(process_offsets(parsed_binary, patterns, found))
         print_offsets(processed)
         if any(not row for row in processed.values()):
             print("Not all offsets are found")
