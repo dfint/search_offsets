@@ -78,7 +78,7 @@ def print_offsets(offsets: Mapping[str, int | None]) -> None:
             print(f"{key} = 0x{value:X}")
 
 
-def change_dir_path_to_file_path(path: Path) -> Path:
+def change_dir_path_to_file_path(path: Path) -> Path | None:
     """Change directory path to file path if needed."""
     if path.is_file():
         return path
@@ -89,7 +89,7 @@ def change_dir_path_to_file_path(path: Path) -> Path:
             print(f"Directory path changed to file path: {file_path!r}")
             return file_path
 
-    return path
+    return None
 
 
 @dataclass
@@ -110,13 +110,16 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
     print(f"{config.autogenerate_version_name=}")
     print()
 
-    path = change_dir_path_to_file_path(path)
+    file_path = change_dir_path_to_file_path(path)
+    if file_path is None:
+        print("Executable file not found. Skipping.")
+        return
 
     is_pe_binary = False
-    with path.open("rb") as executable:
+    with file_path.open("rb") as executable:
         parsed_binary = lief.parse(executable)
         if parsed_binary is None:
-            msg = f"Unknown format of file {path.name}"
+            msg = f"Unknown format of file {file_path.name}"
             raise TypeError(msg)
 
         print(f"Detected file format: {parsed_binary.format}")
@@ -151,7 +154,7 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
         template_name = "linux_offsets.toml.jinja"
     else:
         patterns = load_patterns(config.patterns)
-        found = search_offsets(path, patterns)
+        found = search_offsets(file_path, patterns)
         processed = dict(process_found(parsed_binary, patterns, found))
         print_offsets(processed)
         if any(not row for row in processed.values()):
