@@ -22,7 +22,7 @@ from search_offsets.render_template import init_jinja_env
 root_dir = Path(__file__).parent.parent
 
 
-def search_offsets(path: str, patterns: list[Pattern]) -> Mapping[str, list[int]]:
+def search_offsets(path: str | Path, patterns: list[Pattern]) -> Mapping[str, list[int]]:
     """
     Search patterns in the given file.
     """
@@ -41,10 +41,10 @@ def search_offsets(path: str, patterns: list[Pattern]) -> Mapping[str, list[int]
 
 
 def process_found(
-    pe: lief.PE.Binary,
+    pe: lief.PE.Binary | lief.ELF.Binary,
     pattern_names: Iterable[Pattern],
-    found: Mapping[str, int],
-) -> Iterable[tuple[str, int]]:
+    found: Mapping[str, list[int]],
+) -> Iterable[tuple[str, int | None]]:
     """
     Prepare found offsets for template rendering.
     """
@@ -64,7 +64,7 @@ def process_found(
             yield name, rva
 
 
-def print_offsets(offsets: Mapping[str, int]) -> None:
+def print_offsets(offsets: Mapping[str, int | None]) -> None:
     """
     Print found offsets to the console.
     """
@@ -91,30 +91,29 @@ def change_dir_path_to_file_path(path: Path) -> Path:
 
 @dataclass
 class _Config:
-    path: Path
+    path: str
     patterns: Path
     version_name: str | None = None
     autogenerate_version_name: bool = False
 
 
-@with_config(_Config, "defaults.yaml", ".config.yaml")
-def main(config: DictConfig) -> None:  # noqa: PLR0915
+def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR0915
     """
     Process the given portable executable file, print its checksum (time stamp) and offsets of the found patterns.
     """
-    print(f"{config.path=}")
+    print(f"{path=}")
     print(f"{config.patterns=}")
     print(f"{config.version_name=}")
     print(f"{config.autogenerate_version_name=}")
     print()
 
-    config.path = change_dir_path_to_file_path(config.path)
+    path = change_dir_path_to_file_path(path)
 
     is_pe_binary = False
-    with config.path.open("rb") as executable:
+    with path.open("rb") as executable:
         parsed_binary = lief.parse(executable)
         if parsed_binary is None:
-            msg = f"Unknown format of file {config.path.name}"
+            msg = f"Unknown format of file {path.name}"
             raise TypeError(msg)
 
         print(f"Detected file format: {parsed_binary.format}")
@@ -149,7 +148,7 @@ def main(config: DictConfig) -> None:  # noqa: PLR0915
         template_name = "linux_offsets.toml.jinja"
     else:
         patterns = load_patterns(config.patterns)
-        found = search_offsets(config.path, patterns)
+        found = search_offsets(path, patterns)
         processed = dict(process_found(parsed_binary, patterns, found))
         print_offsets(processed)
         if any(not row for row in processed.values()):
@@ -166,6 +165,14 @@ def main(config: DictConfig) -> None:  # noqa: PLR0915
         file_name = f"offsets_{config.version_name.replace(' ', '_')}.toml"
         (root_dir / file_name).write_text(result, encoding="utf-8")
         print(f"Created {file_name} file")
+
+
+@with_config(_Config, "defaults.yaml", ".config.yaml")
+def main(config: DictConfig) -> None:
+    for path in Path().rglob(config.path):
+        if path.is_dir():
+            process_game_directory(config, path)
+            print()
 
 
 if __name__ == "__main__":
