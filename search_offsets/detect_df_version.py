@@ -44,7 +44,7 @@ class VersionInfo(NamedTuple):
         try:
             beta_number = int(value.group(6))
         except ValueError:
-            beta_number = 0
+            beta_number = None
 
         return cls(
             major = int(value.group(2)),
