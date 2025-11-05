@@ -18,5 +18,5 @@ def test_hex_to_bytes(byte: int):
         (["FF", "??"], [255, None]),
     ],
 )
-def test_convert_to_pattern(pattern: str, expected: list[int | None]):
+def test_convert_to_pattern(pattern: list[str], expected: list[int | None]):
     assert convert_to_pattern(pattern) == expected
