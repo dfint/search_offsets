@@ -47,8 +47,8 @@ def load_patterns(pattern_path: Path) -> list[Pattern]:
             assert command == "Tab", command
             rule_name, _, _, *pattern = pattern_line.rstrip().split(" ")
             assert rule_name == "RuleBytePattern"
-            pattern = convert_to_pattern(pattern)
-            pattern_object = Pattern(tab_name, pattern)
+            parsed_pattern = convert_to_pattern(pattern)
+            pattern_object = Pattern(tab_name, parsed_pattern)
 
             patterns.append(pattern_object)
 
@@ -61,6 +61,7 @@ def group_patterns(patterns: list[Pattern]) -> Mapping[int, list[Pattern]]:
     """
     patterns_dict = defaultdict(list)
     for pattern in patterns:
+        assert pattern.pattern[0] is not None
         patterns_dict[pattern.pattern[0]].append(pattern)
     return patterns_dict
 

@@ -23,6 +23,7 @@ dev = [
     "ruff>=0.12.1,<0.13",
     "pytest>=8.4.1,<9",
     "hypothesis>=6.135.20,<7",
+    "mypy>=1.18.2",
 ]
 
 [build-system]
