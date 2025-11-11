@@ -31,7 +31,7 @@ path: ../game/df_53_02_win
 or a list of path win `paths` key:
 
 ```yaml
-pats:
+paths:
   - ../game/df_53_02_win
   - ../game/df_53_02_linux
 ```
