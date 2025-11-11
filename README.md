@@ -22,10 +22,18 @@ path: "C:/path/to/Dwarf Fortress/Dwarf Fortress.exe"
 
 And then run the utility just with `uv run search`.
 
-`path` can be a glob-like pattern, e.g.:
+It is possible to specify a single path:
 
 ```yaml
-path: ../game/df_53_02_*
+path: ../game/df_53_02_win
+```
+
+or a list of path win `paths` key:
+
+```yaml
+pats:
+  - ../game/df_53_02_win
+  - ../game/df_53_02_linux
 ```
 
 All directories matching specified pattern will be processed.

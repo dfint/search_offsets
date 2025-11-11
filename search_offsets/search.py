@@ -1,7 +1,7 @@
 import binascii
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import lief
@@ -93,8 +93,9 @@ def change_dir_path_to_file_path(path: Path) -> Path | None:
 
 @dataclass
 class _Config:
-    path: str
     patterns: Path
+    path: Path | None = None
+    paths: list[Path] = field(default_factory=list)
     version_name: str | None = None
     autogenerate_version_name: bool = False
 
@@ -170,7 +171,7 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
         jinja_env = init_jinja_env()
         template = jinja_env.get_template(template_name)
         result = template.render(**processed, checksum=checksum, version_name=version_name)
-        file_name = f"offsets_{config.version_name.replace(' ', '_')}.toml"
+        file_name = f"offsets_{version_name.replace(' ', '_')}.toml"
         (root_dir / file_name).write_text(result, encoding="utf-8")
         print(f"Created {file_name} file")
 
@@ -178,9 +179,13 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
 @with_config(_Config, "defaults.yaml", ".config.yaml")
 def main(config: DictConfig) -> None:
     """
-    Find DF executables in directories described by glob pattern in config.path, get offsets from executables.
+    Find DF executables in directory specified in config.path or a list of directories in config.paths,
+    get offsets from executables.
     """
-    for path in Path().rglob(config.path):
+    if config.path:
+        config.paths.append(config.path)
+
+    for path in config.paths:
         if path.is_dir():
             process_game_directory(config, path)
             print()
