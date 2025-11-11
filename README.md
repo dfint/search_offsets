@@ -28,7 +28,7 @@ It is possible to specify a single path:
 path: ../game/df_53_02_win
 ```
 
-or a list of path win `paths` key:
+or a list of paths with `paths` key:
 
 ```yaml
 paths:
