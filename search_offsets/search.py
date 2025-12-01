@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import lief
+from loguru import logger
 from omegaconf import DictConfig
 from rich import print  # noqa: A004
 
@@ -91,6 +92,20 @@ def change_dir_path_to_file_path(path: Path) -> Path | None:
     return None
 
 
+def validate_offset(name: str, found_offsets: Mapping[str, list[int]], count: int) -> None:
+    """Check one offset."""
+    offsets = found_offsets[name]
+    if len(offsets) != count:
+        offsets_str = ", ".join(hex(item) for item in offsets)
+        logger.warning(f"Found wrong number of offsets for '{name}' pattern: {len(offsets)=}, {offsets_str=}")
+
+
+def validate_offsets(found: Mapping[str, list[int]]) -> None:
+    """Check found offsets."""
+    for key in found:
+        validate_offset(key, found, 1)
+
+
 @dataclass
 class _Config:
     patterns: Path
@@ -159,6 +174,7 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
     else:
         patterns = load_patterns(config.patterns)
         found = search_offsets(file_path, patterns)
+        validate_offsets(found)
         processed = dict(process_offsets(parsed_binary, patterns, found))
         print_offsets(processed)
         if any(not row for row in processed.values()):
