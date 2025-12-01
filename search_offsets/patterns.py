@@ -3,6 +3,7 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import NamedTuple
 
+from loguru import logger
 from more_itertools import chunked
 
 
@@ -20,6 +21,14 @@ class Pattern(NamedTuple):
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(name={self.name!r}, pattern={self.pattern!r})"
 
+    def __hash__(self) -> int:
+        return hash(tuple(self.pattern))
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Pattern):
+            return False
+        return self.pattern == other.pattern
+
 
 def hex_to_bytes(s: str) -> bytes:
     """
@@ -33,6 +42,22 @@ def convert_to_pattern(s: list[str]) -> list[int | None]:
     Convert list of the pattern tokens to a list of byte values or None if the token is "??".
     """
     return [None if item == "??" else int(item, 16) for item in s]
+
+
+def check_duplicates(patterns: list[Pattern]) -> None:
+    """
+    Check for duplicate patterns.
+    """
+    duplicates = defaultdict(list)
+
+    for pattern in patterns:
+        duplicates[pattern].append(pattern.name)
+
+    print(list(duplicates.values()))
+
+    for names in duplicates.values():
+        if len(names) > 1:
+            logger.warning(f"Duplicate patterns: {names}")
 
 
 def load_patterns(pattern_path: Path) -> list[Pattern]:
@@ -51,6 +76,8 @@ def load_patterns(pattern_path: Path) -> list[Pattern]:
             pattern_object = Pattern(tab_name, parsed_pattern)
 
             patterns.append(pattern_object)
+
+    check_duplicates(patterns)
 
     return patterns
 
