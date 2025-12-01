@@ -53,8 +53,6 @@ def check_duplicates(patterns: list[Pattern]) -> None:
     for pattern in patterns:
         duplicates[pattern].append(pattern.name)
 
-    print(list(duplicates.values()))
-
     for names in duplicates.values():
         if len(names) > 1:
             logger.warning(f"Duplicate patterns: {names}")
