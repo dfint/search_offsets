@@ -21,14 +21,6 @@ class Pattern(NamedTuple):
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(name={self.name!r}, pattern={self.pattern!r})"
 
-    def __hash__(self) -> int:
-        return hash(tuple(self.pattern))
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, Pattern):
-            return False
-        return self.pattern == other.pattern
-
 
 def hex_to_bytes(s: str) -> bytes:
     """
@@ -51,7 +43,7 @@ def check_duplicates(patterns: list[Pattern]) -> None:
     duplicates = defaultdict(list)
 
     for pattern in patterns:
-        duplicates[pattern].append(pattern.name)
+        duplicates[tuple(pattern.pattern)].append(pattern.name)
 
     for names in duplicates.values():
         if len(names) > 1:
