@@ -55,12 +55,9 @@ def process_offsets(
             yield pattern_name, None
             continue
 
-        for i, offset in enumerate(found[pattern_name], -1):
-            suffix = "" if i < 0 else f"_{i}"
+        for i, offset in enumerate(found[pattern_name]):
+            suffix = "" if i <= 0 else f"_{i}"
             name = pattern_name + suffix
-            if name == "addchar_0":
-                name = "addchar_top"
-
             rva = pe.offset_to_virtual_address(offset)
             if isinstance(rva, lief.lief_errors):
                 msg = f"Error ocurred during getting of virtual address: {rva!r}"
@@ -103,7 +100,10 @@ def validate_offset(name: str, found_offsets: Mapping[str, list[int]], count: in
 def validate_offsets(found: Mapping[str, list[int]]) -> None:
     """Check found offsets."""
     for key in found:
-        validate_offset(key, found, 1)
+        count = 1
+        if key == "lower_case_string":
+            count = 2  # the same pattern for simplify_string and lower_case_string
+        validate_offset(key, found, count)
 
 
 @dataclass
