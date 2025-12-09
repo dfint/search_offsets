@@ -56,7 +56,7 @@ def process_offsets(
             continue
 
         for i, offset in enumerate(found[pattern_name]):
-            suffix = "" if i <= 0 else f"_{i}"
+            suffix = "" if i == 0 else f"_{i}"
             name = pattern_name + suffix
             rva = pe.offset_to_virtual_address(offset)
             if isinstance(rva, lief.lief_errors):
