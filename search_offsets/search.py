@@ -141,8 +141,6 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
             msg = f"Unknown format of file {file_path.name}"
             raise TypeError(msg)
 
-        print(f"Detected file format: {parsed_binary.format}")
-
         if isinstance(parsed_binary, lief.PE.Binary):
             checksum = parsed_binary.header.time_date_stamps
             is_pe_binary = True
@@ -150,8 +148,10 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
             executable.seek(0)
             checksum = binascii.crc32(executable.read())
         else:
-            msg = f"Unsupported file format: {parsed_binary.format}"
+            msg = "Unsupported file format"
             raise TypeError(msg)
+
+        print(f"Detected file format: {parsed_binary.format}")
 
         print(f"checksum = 0x{checksum:X}")
 
