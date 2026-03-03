@@ -3,6 +3,7 @@ from collections import defaultdict
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import lief
 from loguru import logger
@@ -115,6 +116,18 @@ class _Config:
     autogenerate_version_name: bool = False
 
 
+def get_format_name(parsed_binary: Any) -> str:  # noqa: ANN401
+    """
+    Get format name of a parsed binary.
+
+    Getting format name from class module instead of using `.format` attribute
+    because `COFF.Binary` class doesn't have the attribute.
+    See https://github.com/lief-project/LIEF/issues/1292
+    """
+    module = parsed_binary.__class__.__module__
+    return module.rpartition(".")[-1]
+
+
 def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR0915
     """
     Process the given portable executable file, print its checksum (time stamp) and offsets of the found patterns.
@@ -141,6 +154,8 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
             msg = f"Unknown format of file {file_path.name}"
             raise TypeError(msg)
 
+        format_name = get_format_name(parsed_binary)
+
         if isinstance(parsed_binary, lief.PE.Binary):
             checksum = parsed_binary.header.time_date_stamps
             is_pe_binary = True
@@ -148,10 +163,10 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
             executable.seek(0)
             checksum = binascii.crc32(executable.read())
         else:
-            msg = "Unsupported file format"
+            msg = f"Unsupported file format: {format_name}"
             raise TypeError(msg)
 
-        print(f"Detected file format: {parsed_binary.format}")
+        print(f"Detected file format: {format_name}")
 
         print(f"checksum = 0x{checksum:X}")
 
