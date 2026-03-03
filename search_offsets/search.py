@@ -124,7 +124,7 @@ def get_format_name(parsed_binary: Any) -> str:  # noqa: ANN401
     because `COFF.Binary` class doesn't have the attribute.
     See https://github.com/lief-project/LIEF/issues/1292
     """
-    module = parsed_binary.__class__.__module__
+    module: str = parsed_binary.__class__.__module__
     return module.rpartition(".")[-1]
 
 
