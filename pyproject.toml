@@ -39,6 +39,7 @@ select = ["ALL"]
 ignore = [
     "T201",  # `print` found
     "S101",  # Use of assert detected
+    "CPY001",
     "D100",  # Missing docstring in public module
     "D101",
     "D104",  # Missing docstring in public package
