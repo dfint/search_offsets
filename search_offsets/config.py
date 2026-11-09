@@ -18,7 +18,7 @@ def with_config(config_class: type, *config_files: str) -> Callable[[Callable[[D
             for config_file in config_files:
                 try:
                     config.merge_with(OmegaConf.load(config_file))
-                except FileNotFoundError:  # noqa: PERF203
+                except FileNotFoundError:
                     logger.info(f"Config {config_file} not found")
 
             config.merge_with(OmegaConf.from_cli())

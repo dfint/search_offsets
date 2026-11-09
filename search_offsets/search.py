@@ -216,10 +216,17 @@ def main(config: DictConfig) -> None:
     if config.path:
         config.paths.append(config.path)
 
-    for path in config.paths:
-        if path.is_dir():
-            process_game_directory(config, path)
+    for configured_path in config.paths:
+        path = Path(configured_path).expanduser()
+        if not path.is_dir():
+            print(f"Path not found or not a directory: '{path}'")
+            print("Skipping...")
             print()
+            continue
+
+        process_game_directory(config, path)
+        print()
+
 
 
 if __name__ == "__main__":
