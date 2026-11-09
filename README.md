@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/dfint/search_offsets/actions/workflows/tests.yml/badge.svg)](https://github.com/dfint/search_offsets/actions/workflows/tests.yml)
 
-1. Install python 3.10
+1. Install Python 3.12 or newer (below 3.15)
 
 2. [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
 

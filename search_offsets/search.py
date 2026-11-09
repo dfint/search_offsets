@@ -1,13 +1,12 @@
 import binascii
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
-from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 import lief
 from loguru import logger
-from omegaconf import DictConfig
+from pydantic import BaseModel, ConfigDict, Field
 from rich import print  # noqa: A004
 
 from search_offsets.config import with_config
@@ -107,11 +106,12 @@ def validate_offsets(found: Mapping[str, list[int]]) -> None:
         validate_offset(key, found, count)
 
 
-@dataclass
-class _Config:
+class _Config(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     patterns: Path
     path: Path | None = None
-    paths: list[Path] = field(default_factory=list)
+    paths: list[Path] = Field(default_factory=list)
     version_name: str | None = None
     autogenerate_version_name: bool = False
 
@@ -128,7 +128,7 @@ def get_format_name(parsed_binary: Any) -> str:  # noqa: ANN401
     return module.rpartition(".")[-1]
 
 
-def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR0915
+def process_game_directory(config: _Config, path: Path) -> None:  # noqa: PLR0915
     """
     Process the given portable executable file, print its checksum (time stamp) and offsets of the found patterns.
     """
@@ -147,7 +147,7 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
         print(f"Directory path changed to file path: {file_path!r}")
 
     is_pe_binary = False
-    version_name = config.get("version_name", None)
+    version_name = config.version_name
     with file_path.open("rb") as executable:
         parsed_binary = lief.parse(executable)
         if parsed_binary is None:
@@ -208,7 +208,7 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
 
 
 @with_config(_Config, "defaults.yaml", ".config.yaml")
-def main(config: DictConfig) -> None:
+def main(config: _Config) -> None:
     """
     Find DF executables in directory specified in config.path or a list of directories in config.paths,
     get offsets from executables.
