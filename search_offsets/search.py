@@ -43,7 +43,7 @@ def search_offsets(path: str | Path, patterns: list[Pattern]) -> Mapping[str, li
 
 
 def process_offsets(
-    pe: lief.PE.Binary | lief.ELF.Binary,
+    pe: lief.PE.Binary,
     pattern_names: Iterable[Pattern],
     found: Mapping[str, list[int]],
 ) -> Iterable[tuple[str, int | None]]:
@@ -60,9 +60,6 @@ def process_offsets(
             suffix = "" if i == 0 else f"_{i}"
             name = pattern_name + suffix
             rva = pe.offset_to_rva(offset)
-            if isinstance(rva, lief.lief_errors):
-                msg = f"Error occurred during getting of virtual address: {rva!r}"
-                raise RuntimeError(msg)  # noqa: TRY004
             yield name, rva
 
 
@@ -146,7 +143,6 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
     if path != file_path:
         print(f"Directory path changed to file path: {file_path!r}")
 
-    is_pe_binary = False
     version_name = config.get("version_name", None)
     with file_path.open("rb") as executable:
         parsed_binary = lief.parse(executable)
@@ -158,7 +154,6 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
 
         if isinstance(parsed_binary, lief.PE.Binary):
             checksum = parsed_binary.header.time_date_stamps
-            is_pe_binary = True
         elif isinstance(parsed_binary, lief.ELF.Binary):
             executable.seek(0)
             checksum = binascii.crc32(executable.read())
@@ -183,7 +178,7 @@ def process_game_directory(config: DictConfig, path: Path) -> None:  # noqa: PLR
             version_name = f"{version} {steam} {os_part}"
             print(f"Generated version name: {version_name}")
 
-    if not is_pe_binary:
+    if isinstance(parsed_binary, lief.ELF.Binary):
         processed = {}
         template_name = "linux_offsets.toml.jinja"
     else:
