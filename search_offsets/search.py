@@ -59,9 +59,9 @@ def process_offsets(
         for i, offset in enumerate(found[pattern_name]):
             suffix = "" if i == 0 else f"_{i}"
             name = pattern_name + suffix
-            rva = pe.offset_to_virtual_address(offset)
+            rva = pe.offset_to_rva(offset)
             if isinstance(rva, lief.lief_errors):
-                msg = f"Error ocurred during getting of virtual address: {rva!r}"
+                msg = f"Error occurred during getting of virtual address: {rva!r}"
                 raise RuntimeError(msg)  # noqa: TRY004
             yield name, rva
 
